@@ -145,10 +145,17 @@ class ApiGateway {
     this.standalone = options.standalone;
     this.basePath = options.basePath;
     this.playgroundAuthSecret = options.playgroundAuthSecret;
+      
+    this.logger('playgroundAuthSecret', {
+      warning: (`secret is ${this.playgroundAuthSecret}`)
+    });
 
     this.queryRewrite = options.queryRewrite || (async (query) => query);
     this.subscriptionStore = options.subscriptionStore || new LocalSubscriptionStore();
     this.enforceSecurityChecks = options.enforceSecurityChecks || (process.env.NODE_ENV === 'production');
+    this.logger('enforceSecurityChecks', {
+      warning: (`check is ${this.enforceSecurityChecks}`)
+    });
     this.extendContext = options.extendContext;
 
     this.checkAuthFn = this.createCheckAuthFn(options);
