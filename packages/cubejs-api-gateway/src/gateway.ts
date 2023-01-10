@@ -1739,7 +1739,11 @@ class ApiGateway {
 
   protected createDefaultCheckAuth(options?: JWTOptions, internalOptions?: CheckAuthInternalOptions): CheckAuthFn {
     type VerifyTokenFn = (auth: string, secret: string) => Promise<object | string> | object | string;
-
+    this.logger('verifyToken Options', {
+      warning: (
+        `Options are ${options?.algorithms} ${options?.issuer} ${options?.audience} ${options?.subject}`
+      )
+    });
     const verifyToken = (auth, secret) => jwt.verify(auth, secret, {
       algorithms: <JWTAlgorithm[] | undefined>options?.algorithms,
       issuer: options?.issuer,
@@ -1768,6 +1772,11 @@ class ApiGateway {
       }
 
       checkAuthFn = async (auth) => {
+        this.logger('checkAuthFn auth', {
+          warning: (
+            `Auth is ${auth}`
+          )
+        });
         const decoded = <Record<string, any> | null>jwt.decode(auth, { complete: true });
         if (!decoded) {
           throw new CubejsHandlerError(
